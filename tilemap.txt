@@ -1,0 +1,9 @@
+Tile-layer : [tileset, [tile]] + [[tile reference]]
+where tile is just ModelData and tileset is the tileset-image.
+
+However, for a tile-layer, the input is a series of gids. Tilesets are stored separately. For each gid, we can binary-search the list of tilesets and store.
+
+Rendering is super simple, each (tileset, [tile]) pair directly maps to one draw call
+
+Public API :
+Access tileset image and sample data for a tile with given index/position

@@ -1,0 +1,25 @@
+Definitely :
+1. Texture animations (Done)
+2. UI
+3. Basic support for tilemaps (including object layers, animated tiles and background images)
+4. Audio
+
+Maybe :
+1. Custom shaders system
+2. State management and game loop
+3. Vertex animation
+4. Particle system
+
+Tasks :
+1. Make / get a simple tileset with animated tiles.
+2. Learn the basics of Tiled and make a simple map.
+	- Tile layers
+	- Image layers
+	- Object layers
+	- Animated tiles (can do later)
+3. Get a TMX parser library and learn its basics.
+4. Write a tiled map renderer
+	- Tileset API for retrieving the sample data of a given tile
+	- Tile layer structure (tiles are tileset + tile ID) : tile + transform in map space
+	- Object layer structure (objects are shape structs) : object + transform in map space
+	- Image layer structure : image + transform in map space
