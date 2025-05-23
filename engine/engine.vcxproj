@@ -580,6 +580,7 @@
     <ClCompile Include="ext_src\glad\glad.c" />
     <ClCompile Include="src\ng_renderer.cpp" />
     <ClCompile Include="ext_src\stb\stb_image_impl.cpp" />
+    <ClCompile Include="src\ng_tilemap.cpp" />
     <ClCompile Include="src\ng_uniforms.cpp" />
     <ClCompile Include="include\ngine\window\buttoncodes.hpp" />
     <ClCompile Include="src\ng_window.cpp" />

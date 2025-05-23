@@ -12,10 +12,12 @@ namespace ng
 class Tilemap
 {
 private:
-	std::vector<TileLayer> _tileLayers;
+	std::vector<Tileset> _tilesets {};
+	std::vector<TileLayer> _tileLayers {};
 
 public :
-	Tilemap(std::string_view path, Renderer& render);
+	Tilemap(std::string_view path, Renderer& render, 
+			ImageShrinkFilter tilesetShrink, ImageEnlargeFilter tilesetEnlarge, unsigned int tilesetMipmaps);
 };
 
 }
