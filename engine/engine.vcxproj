@@ -526,12 +526,13 @@
     <ClInclude Include="ext_include\KHR\khrplatform.h" />
     <ClInclude Include="include\ngine\renderer\animation.hpp" />
     <ClInclude Include="include\ngine\renderer\default_models.hpp" />
-    <ClInclude Include="include\ngine\renderer\glm_clip_control.hpp" />
+    <ClInclude Include="include\ngine\util\glm_clip_control.hpp" />
     <ClInclude Include="include\ngine\renderer\image.hpp" />
     <ClInclude Include="include\ngine\renderer\ortho_camera.hpp" />
     <ClInclude Include="include\ngine\renderer\renderer_data.hpp" />
     <ClInclude Include="include\ngine\tilemap\tilemap.hpp" />
     <ClInclude Include="include\ngine\tilemap\tileset.hpp" />
+    <ClInclude Include="include\ngine\util\transform.hpp" />
     <ClInclude Include="include\ngine\window\keycodes.hpp" />
     <ClInclude Include="include\ngine\renderer\renderer.hpp" />
     <ClInclude Include="include\ngine\window\window.hpp" />
@@ -581,6 +582,7 @@
     <ClCompile Include="src\ng_renderer.cpp" />
     <ClCompile Include="ext_src\stb\stb_image_impl.cpp" />
     <ClCompile Include="src\ng_tilemap.cpp" />
+    <ClCompile Include="src\ng_transform.cpp" />
     <ClCompile Include="src\ng_uniforms.cpp" />
     <ClCompile Include="include\ngine\window\buttoncodes.hpp" />
     <ClCompile Include="src\ng_window.cpp" />

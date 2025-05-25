@@ -42,16 +42,13 @@ private :
 
 	size_t _getTilesetIndexFor(uint32_t gid, const std::vector<Tileset>& tilesets, size_t first, size_t last);
 
+public : 
 	// Assumes that `tilesets` is sorted in ascending order on firstGid.
 	// `tilesets` must live at least as long as this TileLayer.
 	TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render,
 			  float tileLength, unsigned int tileCountX, unsigned int tileCountY);
 
-public : 
-	TileLayer(const TileLayer& other) = delete;
-	const TileLayer& operator=(const TileLayer& other) = delete;
-
-	void draw(Renderer& render);
+	void draw(Renderer& render, const glm::mat4& transform) const;
 };
 
 }

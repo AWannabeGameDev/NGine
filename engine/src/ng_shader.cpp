@@ -1,5 +1,3 @@
-#include <glad/glad.h>
-
 #include <stdio.h> 
 #include <fstream>
 #include <sstream>

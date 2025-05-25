@@ -1,6 +1,8 @@
 #ifndef NG_SHADER_HPP
 #define NG_SHADER_HPP
 
+#include <glad/glad.h>
+
 #include <string_view>
 #include <initializer_list>
 

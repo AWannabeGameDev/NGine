@@ -17,7 +17,10 @@ private:
 
 public :
 	Tilemap(std::string_view path, Renderer& render, 
-			ImageShrinkFilter tilesetShrink, ImageEnlargeFilter tilesetEnlarge, unsigned int tilesetMipmaps);
+			ImageShrinkFilter tilesetShrink, ImageEnlargeFilter tilesetEnlarge, unsigned int tilesetMipmaps,
+			float tileSize);
+
+	void draw(Renderer& render, const glm::mat4& transform) const;
 };
 
 }

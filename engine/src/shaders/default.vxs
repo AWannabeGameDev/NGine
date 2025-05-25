@@ -6,13 +6,13 @@ layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 textureUV;
 
 // instanced attributes
-layout (location = 2) in mat4 transform;
+layout (location = 2) in mat4 transform; // maybe take transform struct directly?
 layout (location = 6) in vec2 sampleBottomLeft;
 layout (location = 7) in float sampleWidth;
 layout (location = 8) in float sampleHeight;
 
-uniform mat4 camera;
-uniform mat4 globalTransform;
+uniform mat4 camera; // maybe take camera struct directly?
+uniform mat4 globalTransform; // transform struct?
 uniform vec2 imageDimensions;
 
 out vec2 uv;

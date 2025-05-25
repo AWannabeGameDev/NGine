@@ -1,13 +1,18 @@
+#include "ngine/util/glm_clip_control.hpp"
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "ngine/renderer/ortho_camera.hpp"
 
 glm::mat4 ng::OrthographicCamera::generateMatrix() const
 {
-	glm::mat4 projection {glm::ortho(-width / 2, width / 2, -height / 2, height / 2, 0.0f, depth)};
+	glm::mat4 projection {glm::ortho(-dimensions.x / 2 / transform.scale.x, dimensions.x / 2 / transform.scale.x, 
+									 -dimensions.y / 2 / transform.scale.y, dimensions.y / 2 / transform.scale.y,
+									 0.0f, dimensions.z)};
 
 	glm::mat4 view {1.0f};
-	view = glm::translate(view, -center);
-	view = glm::rotate(view, -rotation, glm::vec3 {0.0f, 0.0f, -1.0f});
-	view = glm::scale(view, glm::vec3 {zoom, zoom, 1.0f});
+	view = view * glm::mat4_cast(glm::conjugate(transform.rotation));
+	view = glm::translate(view, -transform.position);
 
 	return projection * view;
 }

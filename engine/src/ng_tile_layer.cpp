@@ -77,10 +77,14 @@ ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>
 	}
 }
 
-void ng::TileLayer::draw(Renderer& render)
+void ng::TileLayer::draw(Renderer& render, const glm::mat4& transform) const
 {
+	render.setGlobalTransform(transform);
+
 	for(const auto& tileRepo : _tileRepos)
 	{
 		render.draw(_tileModel, tileRepo.tileVector.data(), tileRepo.tileVector.size(), tileRepo.tileset->image);
 	}
+
+	render.resetGlobalTransform();
 }

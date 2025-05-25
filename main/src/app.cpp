@@ -1,6 +1,5 @@
 #include <ngine/window/window.hpp>
 #include <ngine/renderer/renderer.hpp>
-#include <ngine/renderer/glm_clip_control.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <ngine/renderer/ortho_camera.hpp>
 #include <ngine/window/keycodes.hpp>
@@ -40,17 +39,10 @@ int main()
     animation.setLoop(false);
     animation.setOnEnd([] () { printf("LMAO ANIMATION ENDED LOL\n"); });
 
-    glm::mat4 transform {1.0f};
-    transform = glm::scale(transform, glm::vec3 {50.0f, 50.0f, 1.0f});
+    ng::Transform transform {};
+    transform.scale = {100.0f, 100.0f, 1.0f};
 
-    ng::OrthographicCamera camera
-    {
-        .width {1280.0f}, .height {720.0f},
-        .depth {100.0f},
-        .center {0.0f},
-        .rotation {0.0f},
-        .zoom {1.0f}
-    };
+    ng::OrthographicCamera camera {.dimensions {1280.0f, 720.0f, 100.0f}};
 
     while(window.userClosedWindow() == false)
     {
@@ -61,20 +53,10 @@ int main()
             animation.start(0);
         }
 
-        glm::vec3 mouseMove {window.deltaMouseX() * camera.width / 2 / camera.zoom, 
-                             window.deltaMouseY() * camera.height / 2 / camera.zoom, 
-                             0.0f};
-        transform = glm::translate(transform, mouseMove);
-
         std::array<ng::ModelData, 4> modelDatas
         {
             ng::ModelData {transform, animation.getFrame((float)window.deltaTime())},
-            ng::ModelData {glm::translate(transform, glm::vec3 {105.0f, 0.0f, 0.0f}), glm::uvec2{0},
-                           material.image.width(), material.image.height()},
-            ng::ModelData {glm::translate(transform, glm::vec3 {0.0f, 105.0f, 0.0f}), glm::uvec2{0},
-                           material.image.width(), material.image.height()},
-            ng::ModelData {glm::translate(transform, glm::vec3 {105.0f, 105.0f, 0.0f}), glm::uvec2{0},
-                           material.image.width(), material.image.height()}
+            ng::ModelData {transform.position + glm::vec3{105.0f, 0.0f, 0.0f}), animation.getFrame((float)window.deltaTime())},
         };
 
         material.color = glm::vec4 {abs(window.mouseX()), abs(window.mouseY()), 0.0f, 1.0f};

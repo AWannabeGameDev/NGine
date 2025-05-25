@@ -894,7 +894,7 @@
     <ClInclude Include="ext_include\KHR\khrplatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ngine\renderer\glm_clip_control.hpp">
+    <ClInclude Include="include\ngine\util\glm_clip_control.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ngine\renderer\ortho_camera.hpp">
@@ -994,6 +994,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ngine\tilemap\tilemap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ngine\util\transform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1140,6 +1143,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ng_tilemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ng_transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
