@@ -10,19 +10,21 @@ namespace ng
 class Transform
 {
 private :
-	glm::quat eulerYXZtoQuaternion(float yaw, float pitch, float roll);
+	glm::quat _eulerYXZtoQuaternion(float yaw, float pitch, float roll);
 
 public:
 	glm::vec3 position {0.0f};
-	glm::quat rotation {0.0f, 0.0f, 0.0f, 1.0f};
+	glm::quat rotation {1.0f, 0.0f, 0.0f, 0.0f};
 	glm::vec3 scale {1.0f};
 
 	// applied in the specified order : yaw-pitch-roll
-	// +ve yaw -> right, +ve pitch -> down, +ve roll -> CCW (in a left-handed system, as used by NGine)
+	// +ve yaw -> right, +ve pitch -> down, +ve roll -> CCW (when +x is right, +y is up and +z is forward)
+	// note that this is is a left-handed system, as used by NGine
+	// more generally (for any coordinate system), +yaw sends +z to +x, +pitch sends +y to +z, and +roll sends +x to +y
 	void rotateLocal(float yaw, float pitch, float roll);
 	void rotateGlobal(float yaw, float pitch, float roll);
 
-	glm::mat4 generateMatrix();
+	glm::mat4 generateMatrix() const;
 };
 
 }

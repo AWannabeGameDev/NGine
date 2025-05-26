@@ -2,7 +2,6 @@
 #define NG_UNIFORMS_HPP
 
 #include <glad/glad.h>
-#include "ngine/renderer/glm_clip_control.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

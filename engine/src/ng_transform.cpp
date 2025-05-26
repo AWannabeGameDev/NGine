@@ -1,6 +1,6 @@
 #include "ngine/util/transform.hpp"
 
-glm::quat ng::Transform::eulerYXZtoQuaternion(float yaw, float pitch, float roll)
+glm::quat ng::Transform::_eulerYXZtoQuaternion(float yaw, float pitch, float roll)
 {
 	// convert euler angles to quaternion directly, without intermediate quaternions 
 	// doing it individually along each axis.
@@ -16,24 +16,24 @@ glm::quat ng::Transform::eulerYXZtoQuaternion(float yaw, float pitch, float roll
 
 	return glm::quat 
 	{
+		cx*cy*cz - sx*sy*sz,
 		sx*cy*cz - cx*sy*sz,
 		cx*sy*cz + sx*cy*sz,
-		cx*cy*sz + sx*sy*cz,
-		cx*cy*cz - sx*sy*sz
+		cx*cy*sz + sx*sy*cz
 	};
 }
 
 void ng::Transform::rotateLocal(float yaw, float pitch, float roll)
 {
-	rotation = eulerYXZtoQuaternion(yaw, pitch, roll) * rotation;
+	rotation = _eulerYXZtoQuaternion(yaw, pitch, roll) * rotation;
 }
 
 void ng::Transform::rotateGlobal(float yaw, float pitch, float roll)
 {
-	rotation = rotation * eulerYXZtoQuaternion(yaw, pitch, roll);
+	rotation = rotation * _eulerYXZtoQuaternion(yaw, pitch, roll);
 }
 
-glm::mat4 ng::Transform::generateMatrix()
+glm::mat4 ng::Transform::generateMatrix() const
 {
 	glm::mat4 transform {1.0f};
 	transform = glm::translate(transform, position);

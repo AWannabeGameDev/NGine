@@ -46,7 +46,7 @@ public:
 	void start(size_t initialFrame);
 	void resume();
 	void stop();
-	const ImageSampleData& getFrame(float deltaTime);
+	const ImageSampleData& getNextFrame(float deltaTime);
 };
 
 class AnimationGroup

@@ -1,4 +1,3 @@
-#include "ngine/renderer/glm_clip_control.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
 #include <stb/stb_image.h>

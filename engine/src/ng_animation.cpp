@@ -44,7 +44,7 @@ void ng::Animation::stop()
 	_active = false;
 }
 
-const ng::ImageSampleData& ng::Animation::getFrame(float deltaTime)
+const ng::ImageSampleData& ng::Animation::getNextFrame(float deltaTime)
 {
 	if(_active)
 	{
