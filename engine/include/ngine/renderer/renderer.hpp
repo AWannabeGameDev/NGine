@@ -28,7 +28,7 @@ private :
 
     static constexpr size_t _MAX_VERTICES {1024};
     static constexpr size_t _MAX_INDICES {4096};
-    static constexpr size_t _MAX_INSTANCES {1024};
+    static constexpr size_t _MAX_INSTANCES {2048};
 
     static constexpr GLuint _BINDING_POINT_VERTICES {0};
     static constexpr GLuint _BINDING_POINT_INSTANCE {1};
@@ -57,7 +57,7 @@ private :
     Viewport _viewport {glm::vec2 {0.0f}, 2.0f, 2.0f};
 
 public :
-    /// The initial viewport fills the window area.
+    // The initial viewport fills the window area.
     Renderer(const Window& window);
 
     ~Renderer();
@@ -72,7 +72,7 @@ public :
     void setCamera(const glm::mat4& cameraMatrix);
     void setViewport(const Window& window, const Viewport& newViewport);
 
-    /// Sets the viewport to fill the current window area.
+    // Sets the viewport to fill the current window area.
     void resetViewport(const Window& window);
 
     void setGlobalTransform(const glm::mat4& transform);

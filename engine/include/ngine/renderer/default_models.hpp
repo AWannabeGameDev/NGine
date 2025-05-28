@@ -8,7 +8,7 @@
 namespace ng
 {
 
-/// A unit quad centered at origin in the xy-plane
+// A unit quad centered at origin in the xy-plane
 inline constexpr std::array<Vertex, 4> quadVertices
 {
 	Vertex {glm::vec3 {-0.5f, -0.5f, 0.0f}, glm::vec2 {0.0f, 0.0f}},
@@ -17,7 +17,7 @@ inline constexpr std::array<Vertex, 4> quadVertices
 	Vertex {glm::vec3 {0.5f, -0.5f, 0.0f}, glm::vec2 {1.0f, 0.0f}}
 };
 
-/// A unit quad centered at origin in the xy-plane
+// A unit quad centered at origin in the xy-plane
 inline constexpr std::array<Index, 6> quadIndices
 {
 	0, 3, 2, 1, 0, 2

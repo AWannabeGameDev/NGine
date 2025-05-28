@@ -61,7 +61,7 @@ public:
 	bool keyPressed(int keycode) const;
 	bool mouseButtonPressed(int buttonCode) const;
 
-	/// Window coordinates are normalized to the range [-1, 1]
+	// Window coordinates are normalized to the range [-1, 1]
 	double mouseX() const;
 	double deltaMouseX() const;
 	double mouseY() const;

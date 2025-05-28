@@ -16,11 +16,13 @@ private:
 	std::vector<TileLayer> _tileLayers {};
 
 public :
+	// Only supports finite maps for now.
+	// Render results are best with nearest-pixel filtering
 	Tilemap(std::string_view path, Renderer& render, 
 			ImageShrinkFilter tilesetShrink, ImageEnlargeFilter tilesetEnlarge, unsigned int tilesetMipmaps,
 			float tileSize);
 
-	void draw(Renderer& render, const glm::mat4& transform) const;
+	void draw(Renderer& render, const glm::mat4& transform = glm::mat4 {1.0f}) const;
 };
 
 }

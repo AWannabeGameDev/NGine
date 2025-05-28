@@ -10,5 +10,10 @@ out vec4 finalColor;
 
 void main()
 {
-    finalColor = color * texture(sampler, uv);
+	finalColor = color * texture(sampler, uv);
+
+	if(finalColor.a == 0.0f)
+	{
+		discard;
+	}
 }

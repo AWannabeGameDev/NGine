@@ -8,6 +8,7 @@
 namespace ng
 {
 
+// The part of the world the camera renders fills the entire viewport of the renderer.
 class OrthographicCamera
 {
 public :

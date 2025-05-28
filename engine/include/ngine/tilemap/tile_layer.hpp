@@ -45,10 +45,13 @@ private :
 public : 
 	// Assumes that `tilesets` is sorted in ascending order on firstGid.
 	// `tilesets` must live at least as long as this TileLayer.
+	// Only supports finite maps right now.
+	// For internal use only, it is not intended for the user to call this constructor.
 	TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render,
-			  float tileLength, unsigned int tileCountX, unsigned int tileCountY);
+			  float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth);
 
-	void draw(Renderer& render, const glm::mat4& transform) const;
+	// Bottom-left of the layer is rendered at the world-origin (unless the global transform has been set)
+	void draw(Renderer& render) const;
 };
 
 }

@@ -60,19 +60,13 @@ private:
 public:
     Uniforms() = default;
 
-    Uniforms(const Uniforms& other) = delete;
-    const Uniforms& operator=(const Uniforms& other) = delete;
-
     void addUniform(GLuint shaderId, std::string_view name);
 
-    /// Uniforms must be registered with addUniform before setting them.
+    // Uniforms must be registered with addUniform before setting them.
     void setUniform(GLuint shaderId, std::string_view name, const glm::mat4& mat4);
-    /// Uniforms must be registered with addUniform before setting them.
     void setUniform(GLuint shaderId, std::string_view name, const glm::vec4& vec4);
-    /// Uniforms must be registered with addUniform before setting them.
     void setUniform(GLuint shaderId, std::string_view name, const glm::vec2& vec2);
 
-    /// Uniforms must be registered with addUniform before setting them.
     void setBindlessHandle(GLuint shaderId, std::string_view name, GLuint64 handle);
 };
 

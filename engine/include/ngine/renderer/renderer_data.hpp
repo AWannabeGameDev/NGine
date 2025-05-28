@@ -13,7 +13,7 @@ namespace ng
 
 using Index = unsigned int;
 
-/// Sampling via the given uv is done relative to the sampling window specified by ImageSampleData.
+// Sampling via the given uv is done relative to the sampling window specified by ImageSampleData.
 struct Vertex
 {
     glm::vec3 position;
@@ -51,7 +51,7 @@ struct Material
     glm::vec4 color;
 };
 
-/// The coordinates and dimensions are in normalized window coordinates (verying in [-1, 1] on both axes)
+// The coordinates and dimensions are in normalized window coordinates (verying in [-1, 1] on both axes)
 struct Viewport
 {
     glm::vec2 center;

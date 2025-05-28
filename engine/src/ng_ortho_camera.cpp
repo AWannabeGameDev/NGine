@@ -6,8 +6,8 @@
 
 glm::mat4 ng::OrthographicCamera::generateMatrix() const
 {
-	glm::mat4 projection {glm::ortho(-dimensions.x / 2 / transform.scale.x, dimensions.x / 2 / transform.scale.x, 
-									 -dimensions.y / 2 / transform.scale.y, dimensions.y / 2 / transform.scale.y,
+	glm::mat4 projection {glm::ortho(-dimensions.x / 2 * transform.scale.x, dimensions.x / 2 * transform.scale.x,
+									 -dimensions.y / 2 * transform.scale.y, dimensions.y / 2 * transform.scale.y,
 									 0.0f, dimensions.z)};
 
 	glm::mat4 view {1.0f};

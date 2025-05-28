@@ -12,24 +12,37 @@ ng::Tilemap::Tilemap(std::string_view path, Renderer& render,
 	for(const auto& tileset : map.getTilesets())
 	{
 		Image tilesetImg {tileset.getImagePath(), tilesetShrink, tilesetEnlarge, 
-						  ImageWrap::CLAMP_TO_EDGE, tilesetMipmaps};
+						  ImageWrap::MIRRORED_REPEAT, tilesetMipmaps};
 
 		_tilesets.emplace_back(tilesetImg, tileset.getFirstGID(), tileset.getLastGID(),
 							   tileset.getTileSize().x, tileset.getColumnCount(), 
 							   tileset.getTileCount() / tileset.getColumnCount());
 	}
 
-	for(const auto& layer : map.getLayers())
+	for(size_t layerIdx {0}; layerIdx < map.getLayers().size(); layerIdx++)
 	{
+		const auto& layer {map.getLayers()[layerIdx]};
+
+		// temporary, will add support for other layers later.
+		if(layer->getType() != tmx::Layer::Type::Tile)
+		{
+			continue;
+		}
+
 		const auto& tileLayer {layer->getLayerAs<tmx::TileLayer>()};
-		_tileLayers.emplace_back(tileLayer, _tilesets, render, tileSize, map.getTileCount().x, map.getTileCount().y);
+		_tileLayers.emplace_back(tileLayer, _tilesets, render, tileSize, map.getTileCount().x, map.getTileCount().y, 
+								 (float)(map.getLayers().size() - layerIdx));
 	}
 }
 
 void ng::Tilemap::draw(Renderer& render, const glm::mat4& transform) const
 {
+	render.setGlobalTransform(transform);
+
 	for(const auto& tileLayer : _tileLayers)
 	{
-		tileLayer.draw(render, transform);
+		tileLayer.draw(render);
 	}
+
+	render.resetGlobalTransform();
 }
