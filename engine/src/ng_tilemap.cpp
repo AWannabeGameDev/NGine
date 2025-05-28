@@ -35,13 +35,13 @@ ng::Tilemap::Tilemap(std::string_view path, Renderer& render,
 	}
 }
 
-void ng::Tilemap::draw(Renderer& render, const glm::mat4& transform) const
+void ng::Tilemap::draw(Renderer& render, const Prefab& quad, const glm::mat4& transform) const
 {
 	render.setGlobalTransform(transform);
 
 	for(const auto& tileLayer : _tileLayers)
 	{
-		tileLayer.draw(render);
+		tileLayer.draw(render, quad);
 	}
 
 	render.resetGlobalTransform();

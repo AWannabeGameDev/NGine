@@ -22,7 +22,7 @@ public :
 			ImageShrinkFilter tilesetShrink, ImageEnlargeFilter tilesetEnlarge, unsigned int tilesetMipmaps,
 			float tileSize);
 
-	void draw(Renderer& render, const glm::mat4& transform = glm::mat4 {1.0f}) const;
+	void draw(Renderer& render, const Prefab& quad, const glm::mat4& transform = glm::mat4 {1.0f}) const;
 };
 
 }

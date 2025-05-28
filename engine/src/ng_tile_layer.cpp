@@ -26,8 +26,7 @@ size_t ng::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector<Tilese
 
 ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render,
 						 float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
-	_tileCountX {tileCountX}, _tileCountY {tileCountY},
-	_tileModel {render.newPrefab(quadVertices.data(), quadVertices.size(), quadIndices.data(), quadIndices.size())}
+	_tileCountX {tileCountX}, _tileCountY {tileCountY}
 {
 	_tileMatrix.reserve(layer.getTiles().size());
 
@@ -40,6 +39,7 @@ ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>
 		// empty tile
 		if(tile.ID == 0)
 		{
+			_tileMatrix.emplace_back(-1, -1);
 			continue;
 		}
 
@@ -59,6 +59,27 @@ ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>
 			tileRepoIdx = _tileRepos.size() - 1;
 		}
 
+		_TileRepo& tileRepo {_tileRepos[tileRepoIdx]};
+
+		float tileFlipX {1.0f};
+		float tileFlipY {1.0f};
+
+		if(tile.flipFlags & (uint8_t)2)
+		{
+			tileFlipX *= -1.0f;
+			tileFlipY *= -1.0f;
+		}
+
+		if(tile.flipFlags & (uint8_t)4)
+		{
+			tileFlipY *= -1.0f;
+		}
+
+		if(tile.flipFlags & (uint8_t)8)
+		{
+			tileFlipX *= -1.0f;
+		}
+
 		Transform tileTransform
 		{
 			.position
@@ -68,7 +89,7 @@ ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>
 				layerDepth
 			},
 
-			.scale {tileLength, tileLength, 1.0f}
+			.scale {tileLength * tileFlipX, tileLength * tileFlipY, 1.0f}
 		};
 
 		unsigned int tileIdxInTileset {tile.ID - tileset.firstGid};
@@ -81,15 +102,15 @@ ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>
 
 		ImageSampleData tileSampleData {tilesetSamplePosition, tileset.tileLength, tileset.tileLength};
 
-		_tileRepos[tileRepoIdx].tileVector.emplace_back(tileTransform.generateMatrix(), tileSampleData);
-		_tileMatrix.emplace_back(tileRepoIdx, _tileRepos[tileRepoIdx].tileVector.size() - 1);
+		tileRepo.tileVector.emplace_back(tileTransform.generateMatrix(), tileSampleData);
+		_tileMatrix.emplace_back((int)tileRepoIdx, (int)(tileRepo.tileVector.size() - 1));
 	}
 }
 
-void ng::TileLayer::draw(Renderer& render) const
+void ng::TileLayer::draw(Renderer& render, const Prefab& quad) const
 {
 	for(const auto& tileRepo : _tileRepos)
 	{
-		render.draw(_tileModel, tileRepo.tileVector.data(), tileRepo.tileVector.size(), tileRepo.tileset->image);
+		render.draw(quad, tileRepo.tileVector.data(), tileRepo.tileVector.size(), tileRepo.tileset->image);
 	}
 }

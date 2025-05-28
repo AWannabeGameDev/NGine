@@ -11,9 +11,12 @@ int main()
 	ng::Window window {1280, 720, "NGine"};
 	ng::Renderer render {window};
 
-	ng::OrthographicCamera camera {.dimensions {100.0f, 100.0f * 9.0f / 16.0f, 10.0f}};
-	float cameraSpeed {100.0f};
-	float zoomSpeed {10.0f};
+	ng::OrthographicCamera camera {.dimensions {200.0f, 200.0f * 9.0f / 16.0f, 10.0f}};
+	float cameraSpeed {150.0f};
+	float zoomSpeed {3.0f};
+
+	ng::Prefab quad {render.newPrefab(ng::quadVertices.data(), ng::quadVertices.size(),
+									  ng::quadIndices.data(), ng::quadIndices.size())};
 
 	ng::Tilemap map {"main/res/orthogonal-outside.tmx", render, 
 					 ng::ImageShrinkFilter::PIXEL_NEAREST_NO_MIPMAP,
@@ -55,7 +58,7 @@ int main()
 		render.setCamera(camera.generateMatrix());
 		render.clear(glm::vec4 {0.05f, 0.05f, 0.05f, 0.0f});
 
-		map.draw(render);
+		map.draw(render, quad);
 
 		window.swapBuffers();
 	}

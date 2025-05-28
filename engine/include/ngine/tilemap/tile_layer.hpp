@@ -26,8 +26,9 @@ private :
 
 	struct _TileReference
 	{
-		size_t tileRepoIdx;
-		size_t tileIdx;
+		// these are ints and not size_t's so that an empty tile can be represented by -1.
+		int tileRepoIdx;
+		int tileIdx;
 	};
 
 	const unsigned int _tileCountX;
@@ -37,8 +38,6 @@ private :
 
 	// top to bottom, left to right
 	std::vector<_TileReference> _tileMatrix {};
-
-	Prefab _tileModel;
 
 	size_t _getTilesetIndexFor(uint32_t gid, const std::vector<Tileset>& tilesets, size_t first, size_t last);
 
@@ -51,7 +50,7 @@ public :
 			  float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth);
 
 	// Bottom-left of the layer is rendered at the world-origin (unless the global transform has been set)
-	void draw(Renderer& render) const;
+	void draw(Renderer& render, const Prefab& quad) const;
 };
 
 }
