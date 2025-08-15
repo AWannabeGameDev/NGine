@@ -1,0 +1,18 @@
+#version 460 core
+
+in vec2 uv;
+
+uniform sampler2D sampler;
+uniform vec4 color;
+
+out vec4 finalColor;
+
+void main()
+{
+	finalColor = color * texture(sampler, uv);
+
+	if(finalColor.a == 0.0f)
+	{
+		discard;
+	}
+}
