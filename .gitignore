@@ -1,9 +1,5 @@
 .vscode/
-**/lib/**
-!**/lib/.gitkeep
-**/bin/**
-!**/bin/.gitkeep
-**/interms/**
-!**/interms/.gitkeep
+**/lib/
+**/bin/
 *.make
 Makefile
