@@ -5,6 +5,7 @@
 #include <string_view>
 
 #include "ngine/tilemap/tile_layer.hpp"
+#include "ngine/tilemap/object_layer.hpp"
 
 namespace ng
 {
@@ -14,6 +15,8 @@ class Tilemap
 private:
 	std::vector<Tileset> _tilesets {};
 	std::vector<TileLayer> _tileLayers {};
+
+	std::vector<ObjectLayer> _objLayers {};
 
 public :
 	// Only supports finite maps for now.

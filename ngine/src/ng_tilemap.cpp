@@ -23,15 +23,26 @@ ng::Tilemap::Tilemap(std::string_view path, Renderer& render,
 	{
 		const auto& layer {map.getLayers()[layerIdx]};
 
-		// temporary, will add support for other layers later.
-		if(layer->getType() != tmx::Layer::Type::Tile)
+		switch(layer->getType())
 		{
-			continue;
-		}
+			case tmx::Layer::Type::Tile :
+			{
+				const tmx::TileLayer& tileLayer {layer->getLayerAs<tmx::TileLayer>()};
+				_tileLayers.emplace_back(tileLayer, _tilesets, render, tileSize, 
+										map.getTileCount().x, map.getTileCount().y, 
+										(float)(map.getLayers().size() - layerIdx));
+				
+				break;
+			}
 
-		const auto& tileLayer {layer->getLayerAs<tmx::TileLayer>()};
-		_tileLayers.emplace_back(tileLayer, _tilesets, render, tileSize, map.getTileCount().x, map.getTileCount().y, 
-								 (float)(map.getLayers().size() - layerIdx));
+			case tmx::Layer::Type::Object :
+			{
+				const tmx::ObjectGroup& objLayer {layer->getLayerAs<tmx::ObjectGroup>()};
+				_objLayers.emplace_back(objLayer);
+				
+				break;
+			}
+		}
 	}
 }
 
