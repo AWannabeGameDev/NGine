@@ -2,12 +2,12 @@ workspace "NGine"
     configurations {"debug", "release"}
 
     filter "configurations:debug"
-        defines {"DEBUG"}
+        defines {"_DEBUG"}
         symbols "On"
         optimize "Off"
 
     filter "configurations:release"
-        defines {"NDEBUG"}
+        defines {"_NDEBUG"}
         symbols "Off"
         optimize "On"
 
