@@ -38,7 +38,7 @@ ng::Tilemap::Tilemap(std::string_view path, Renderer& render,
 			case tmx::Layer::Type::Object :
 			{
 				const tmx::ObjectGroup& objLayer {layer->getLayerAs<tmx::ObjectGroup>()};
-				_objLayers.emplace_back(objLayer);
+				objectLayers.emplace_back(objLayer);
 				
 				break;
 			}

@@ -16,9 +16,9 @@ private:
 	std::vector<Tileset> _tilesets {};
 	std::vector<TileLayer> _tileLayers {};
 
-	std::vector<ObjectLayer> _objLayers {};
-
 public :
+	std::vector<ObjectLayer> objectLayers {};
+
 	// Only supports finite maps for now.
 	// Render results are best with nearest-pixel filtering
 	Tilemap(std::string_view path, Renderer& render, 

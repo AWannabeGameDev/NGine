@@ -23,10 +23,9 @@ using Shape = std::variant<Rectangle, Point>;
 
 class ObjectLayer
 {
-private :
-    std::vector<Shape> _objects {}; 
-
 public :
+    std::vector<Shape> objects {}; 
+
     ObjectLayer(const tmx::ObjectGroup& objLayer);
 };
 
