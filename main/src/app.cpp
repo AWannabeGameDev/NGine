@@ -21,7 +21,35 @@ int main()
 	ng::Tilemap map {"main/res/orthogonal-outside.tmx", render, 
 					 ng::ImageShrinkFilter::PIXEL_NEAREST_NO_MIPMAP,
 					 ng::ImageEnlargeFilter::PIXEL_NEAREST,
-					 1, 10};
+					 1, 10.0f};
+
+	std::vector<ng::ModelData> objModels {};
+
+	for(const auto& objLayer : map.objectLayers)
+	{
+		for(const auto& obj : objLayer.objects)
+		{
+			if(obj.index() == (size_t)ng::ShapeIndex::Rectangle)
+			{
+				const ng::Rectangle& rect {std::get<ng::Rectangle>(obj)};
+				
+				ng::Transform rectTransform
+				{
+					.position {10.0f * glm::vec3 {rect.topLeft + glm::vec2 {rect.width / 2, -rect.height / 2}, 0.0f}},
+					.scale {rect.width * 10.0f, rect.height * 10.0f, 1.0f}
+				};
+
+				ng::ImageSampleData sampleData
+				{
+					.bottomLeft {0, 0},
+					.width {1},
+					.height {1}
+				};
+
+				objModels.emplace_back(rectTransform.generateMatrix(), sampleData);
+			}
+		}
+	}
 
 	while(window.userClosedWindow() == false)
 	{
@@ -58,6 +86,7 @@ int main()
 		render.setCamera(camera.generateMatrix());
 		render.clear(glm::vec4 {0.05f, 0.05f, 0.05f, 0.0f});
 
+		render.draw(quad, objModels.data(), objModels.size(), glm::vec4 {1.0f, 1.0f, 1.0f, 1.0f});
 		map.draw(render, quad);
 
 		window.swapBuffers();

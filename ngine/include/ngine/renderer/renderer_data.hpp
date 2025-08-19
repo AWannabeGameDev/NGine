@@ -32,6 +32,7 @@ private :
     Prefab(GLuint indexCount, GLuint indexOffset, GLint vertexOffset);
 };
 
+// Images coordinates are: (0, 0) on the bottom-left, (width, height) in pixels on the top-right
 struct ImageSampleData
 {
     glm::uvec2 bottomLeft;
@@ -51,7 +52,7 @@ struct Material
     glm::vec4 color;
 };
 
-// The coordinates and dimensions are in normalized window coordinates (verying in [-1, 1] on both axes)
+// The coordinates and dimensions are in normalized window coordinates (varying in [-1, 1] on both axes)
 struct Viewport
 {
     glm::vec2 center;

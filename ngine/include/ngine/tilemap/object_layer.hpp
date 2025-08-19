@@ -21,12 +21,17 @@ using Point = glm::vec2;
 
 using Shape = std::variant<Rectangle, Point>;
 
+enum class ShapeIndex
+{
+    Rectangle, Point
+};
+
 class ObjectLayer
 {
 public :
     std::vector<Shape> objects {}; 
 
-    ObjectLayer(const tmx::ObjectGroup& objLayer);
+    ObjectLayer(const tmx::ObjectGroup& objLayer, unsigned int mapWidth, unsigned int mapHeight, unsigned int mapTileSize);
 };
 
 }

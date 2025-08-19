@@ -28,8 +28,10 @@ ng::Tilemap::Tilemap(std::string_view path, Renderer& render,
 			case tmx::Layer::Type::Tile :
 			{
 				const tmx::TileLayer& tileLayer {layer->getLayerAs<tmx::TileLayer>()};
+
+				const auto& tileCount {map.getTileCount()};
 				_tileLayers.emplace_back(tileLayer, _tilesets, render, tileSize, 
-										map.getTileCount().x, map.getTileCount().y, 
+										tileCount.x, tileCount.y, 
 										(float)(map.getLayers().size() - layerIdx));
 				
 				break;
@@ -38,7 +40,10 @@ ng::Tilemap::Tilemap(std::string_view path, Renderer& render,
 			case tmx::Layer::Type::Object :
 			{
 				const tmx::ObjectGroup& objLayer {layer->getLayerAs<tmx::ObjectGroup>()};
-				objectLayers.emplace_back(objLayer);
+
+				const auto& tileCount {map.getTileCount()};
+				const auto& tileSize {map.getTileSize()};
+				objectLayers.emplace_back(objLayer, tileCount.x * tileSize.x, tileCount.y * tileSize.x, tileSize.x);
 				
 				break;
 			}

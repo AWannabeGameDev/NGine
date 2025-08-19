@@ -7,6 +7,7 @@
 namespace ng
 {
 
+// NGine's world-space uses the left-handed coordinate system i.e. +x is right, +y is up and +z is forward.
 class Transform
 {
 private :
@@ -19,7 +20,7 @@ public:
 
 	// applied in the specified order : yaw-pitch-roll
 	// +ve yaw -> right, +ve pitch -> down, +ve roll -> CCW (when +x is right, +y is up and +z is forward)
-	// note that this is is a left-handed system, as used by NGine
+	// note that this is a left-handed system, as used by NGine
 	// more generally (for any coordinate system), +yaw sends +z to +x, +pitch sends +y to +z, and +roll sends +x to +y
 	void rotateLocal(float yaw, float pitch, float roll);
 	void rotateGlobal(float yaw, float pitch, float roll);

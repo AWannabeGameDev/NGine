@@ -21,6 +21,7 @@ public :
 
 	// Only supports finite maps for now.
 	// Render results are best with nearest-pixel filtering
+	// Object coordinates are normalized so that tile-size is 1 unit.
 	Tilemap(std::string_view path, Renderer& render, 
 			ImageShrinkFilter tilesetShrink, ImageEnlargeFilter tilesetEnlarge, unsigned int tilesetMipmaps,
 			float tileSize);
