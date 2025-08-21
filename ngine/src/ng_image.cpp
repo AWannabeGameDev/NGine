@@ -6,8 +6,7 @@
 
 #include "ngine/renderer/image.hpp"
 
-ng::Image::Image(std::string_view path, ImageShrinkFilter minFilter, ImageEnlargeFilter magFilter, ImageWrap wrap,
-				 unsigned int mipmapLevels) :
+ng::Image::Image(std::string_view path, ImageShrinkFilter minFilter, ImageEnlargeFilter magFilter, ImageWrap wrap, unsigned int mipmapLevels) :
 	_textureRef {std::make_shared<_GPUTexture>()}
 {
 	stbi_set_flip_vertically_on_load(true);

@@ -15,23 +15,18 @@ int main()
 	float cameraSpeed {150.0f};
 	float zoomSpeed {3.0f};
 
-	ng::Prefab quad {render.newPrefab(ng::quadVertices.data(), ng::quadVertices.size(),
-									  ng::quadIndices.data(), ng::quadIndices.size())};
+	ng::Prefab quad {render.newPrefab(ng::quadVertices.data(), ng::quadVertices.size(), ng::quadIndices.data(), ng::quadIndices.size())};
 
-	ng::Tilemap map {"main/res/orthogonal-outside.tmx", render, 
-					 ng::ImageShrinkFilter::PIXEL_NEAREST_NO_MIPMAP,
-					 ng::ImageEnlargeFilter::PIXEL_NEAREST,
-					 1, 10.0f};
-
+	ng::tiled::Tilemap map {"main/res/orthogonal-outside.tmx", render, ng::ImageShrinkFilter::PIXEL_NEAREST_NO_MIPMAP, ng::ImageEnlargeFilter::PIXEL_NEAREST, 1, 10.0f};
 	std::vector<ng::ModelData> objModels {};
 
-	for(const auto& objLayer : map.objectLayers)
+	for(const ng::tiled::ObjectLayer& objLayer : map.objectLayers)
 	{
-		for(const auto& obj : objLayer.objects)
+		for(const ng::tiled::Object& obj : objLayer.objects)
 		{
-			if(obj.index() == (size_t)ng::ShapeIndex::Rectangle)
+			if(obj.shape.index() == (size_t)ng::tiled::ShapeIndex::RECTANGLE)
 			{
-				const ng::Rectangle& rect {std::get<ng::Rectangle>(obj)};
+				const auto& rect {std::get<ng::tiled::Rectangle>(obj.shape)};
 				
 				ng::Transform rectTransform
 				{

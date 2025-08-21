@@ -6,7 +6,7 @@
 #include "ngine/renderer/default_models.hpp"
 #include "ngine/util/transform.hpp"
 
-size_t ng::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector<Tileset>& tilesets, size_t first, size_t last)
+size_t ng::tiled::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector<Tileset>& tilesets, size_t first, size_t last)
 {
 	size_t middleIdx {(first + last) / 2};
 
@@ -24,8 +24,7 @@ size_t ng::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector<Tilese
 	}
 }
 
-ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render,
-						 float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
+ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render, float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
 	_tileCountX {tileCountX}, _tileCountY {tileCountY}
 {
 	_tileMatrix.reserve(layer.getTiles().size());
@@ -82,13 +81,7 @@ ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>
 
 		Transform tileTransform
 		{
-			.position
-			{
-				((float)(tileIdx % tileCountX) + 0.5f) * tileLength,
-				((float)tileCountY - (float)(tileIdx / tileCountX) - 1.0f + 0.5f) * tileLength,
-				layerDepth
-			},
-
+			.position {((float)(tileIdx % tileCountX) + 0.5f) * tileLength, ((float)tileCountY - (float)(tileIdx / tileCountX) - 1.0f + 0.5f) * tileLength, layerDepth},
 			.scale {tileLength * tileFlipX, tileLength * tileFlipY, 1.0f}
 		};
 
@@ -107,9 +100,9 @@ ng::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>
 	}
 }
 
-void ng::TileLayer::draw(Renderer& render, const Prefab& quad) const
+void ng::tiled::TileLayer::draw(Renderer& render, const Prefab& quad) const
 {
-	for(const auto& tileRepo : _tileRepos)
+	for(const _TileRepo& tileRepo : _tileRepos)
 	{
 		render.draw(quad, tileRepo.tileVector.data(), tileRepo.tileVector.size(), tileRepo.tileset->image);
 	}

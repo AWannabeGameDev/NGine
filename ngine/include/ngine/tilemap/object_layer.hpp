@@ -3,11 +3,12 @@
 
 #include <tmxlite/ObjectGroup.hpp>
 #include <glm/vec2.hpp>
+#include <glm/vec4.hpp>
 
 #include <variant>
 #include <vector>
 
-namespace ng
+namespace ng::tiled
 {
 
 struct Rectangle
@@ -23,13 +24,30 @@ using Shape = std::variant<Rectangle, Point>;
 
 enum class ShapeIndex
 {
-    Rectangle, Point
+    RECTANGLE, POINT
+};
+
+struct Property
+{
+    std::string name;
+    std::variant<bool, float, int, std::string, glm::vec4> value;
+};
+
+enum class PropertyIndex
+{
+    BOOL, FLOAT, INT, STRING, COLOR
+};
+
+struct Object
+{
+    Shape shape;
+    std::vector<Property> properties;
 };
 
 class ObjectLayer
 {
 public :
-    std::vector<Shape> objects {}; 
+    std::vector<Object> objects {};
 
     ObjectLayer(const tmx::ObjectGroup& objLayer, unsigned int mapWidth, unsigned int mapHeight, unsigned int mapTileSize);
 };

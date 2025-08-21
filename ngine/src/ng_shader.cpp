@@ -56,7 +56,7 @@ unsigned int ng::createShaderProgram(const std::initializer_list<std::string_vie
 {
 	GLuint program {glCreateProgram()};
 
-	for(const auto& path : shaderPaths)
+	for(const std::string_view& path : shaderPaths)
 	{
 		std::string_view extension {path.substr(path.size() - 3, 3)};
 		int extensionHash {extension[0] + (2 * extension[1]) + (3 * extension[2])};

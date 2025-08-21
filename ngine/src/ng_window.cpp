@@ -11,12 +11,12 @@ ng::Window::Window(int width, int height, std::string_view title) :
 {
 	glfwSetWindowUserPointer(_window, this);
 
-	for(auto& keyStatus : _keys)
+	for(bool& keyStatus : _keys)
 	{
 		keyStatus = false;
 	}
 
-	for(auto& mouseButtonStatus : _mouseButtons)
+	for(bool& mouseButtonStatus : _mouseButtons)
 	{
 		mouseButtonStatus = false;
 	}

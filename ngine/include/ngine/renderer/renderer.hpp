@@ -50,8 +50,7 @@ private :
     size_t _totalVertexCount {0};
     size_t _totalIndexCount {0};
 
-    GLuint _defaultShader {createShaderProgram({"ngine/src/shaders/default.vxs",
-                                                "ngine/src/shaders/default.fms"})};
+    GLuint _defaultShader {createShaderProgram({"ngine/src/shaders/default.vxs", "ngine/src/shaders/default.fms"})};
 
     Uniforms _uniforms {};
 

@@ -3,7 +3,7 @@
 
 #include "ngine/renderer/image.hpp"
 
-namespace ng
+namespace ng::tiled
 {
 
 struct Tileset

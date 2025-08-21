@@ -10,7 +10,7 @@
 #include "ngine/tilemap/tileset.hpp"
 #include "ngine/renderer/renderer.hpp"
 
-namespace ng
+namespace ng::tiled
 {
 
 class TileLayer
@@ -46,8 +46,7 @@ public :
 	// `tilesets` must live at least as long as this TileLayer.
 	// Only supports finite maps right now.
 	// For internal use only, it is not intended for the user to call this constructor.
-	TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render,
-			  float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth);
+	TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render, float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth);
 
 	// Bottom-left of the layer is rendered at the world-origin (unless the global transform has been set)
 	void draw(Renderer& render, const Prefab& quad) const;

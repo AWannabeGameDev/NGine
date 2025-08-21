@@ -53,8 +53,7 @@ private :
 
 public :
 	// `mipmapLevels` is silently ignored if `minFilter` does not specify mipmap-based filtering.
-	Image(std::string_view path, ImageShrinkFilter minFilter, ImageEnlargeFilter magFilter, ImageWrap wrap,
-		  unsigned int mipmapLevels);
+	Image(std::string_view path, ImageShrinkFilter minFilter, ImageEnlargeFilter magFilter, ImageWrap wrap, unsigned int mipmapLevels);
 	Image(const glm::vec4& color);
 
 	unsigned int width() const;
