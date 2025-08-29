@@ -97,6 +97,7 @@ bool ng::AnimationGroup::_HeteroStringEquals::operator()(std::string_view lhs, s
 ng::AnimationGroup::AnimationGroup(size_t maxAnimations)
 {
 	_animations.reserve(maxAnimations);
+	_nameToAnimation.reserve(maxAnimations);
 }
 
 ng::Animation& ng::AnimationGroup::addAnimation(std::string_view name, size_t maxFrames)

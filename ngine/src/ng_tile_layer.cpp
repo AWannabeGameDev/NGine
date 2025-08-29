@@ -5,6 +5,7 @@
 #include "ngine/tilemap/tile_layer.hpp"
 #include "ngine/renderer/default_models.hpp"
 #include "ngine/util/transform.hpp"
+#include "ngine/tilemap/tilemap_util.hpp"
 
 size_t ng::tiled::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector<Tileset>& tilesets, size_t first, size_t last)
 {
@@ -27,8 +28,6 @@ size_t ng::tiled::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector
 ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render, float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
 	_tileCountX {tileCountX}, _tileCountY {tileCountY}
 {
-	_tileMatrix.reserve(layer.getTiles().size());
-
 	std::unordered_map<uint32_t, size_t> tileRepoFirstGidToIdx {};
 
 	for(size_t tileIdx {0}; tileIdx < layer.getTiles().size(); tileIdx++)
@@ -38,11 +37,11 @@ ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<T
 		// empty tile
 		if(tile.ID == 0)
 		{
-			_tileMatrix.emplace_back(-1, -1);
 			continue;
 		}
 
-		const Tileset& tileset {tilesets[_getTilesetIndexFor(tile.ID, tilesets, 0, tilesets.size() - 1)]};
+		size_t tilesetIdx {_getTilesetIndexFor(tile.ID, tilesets, 0, tilesets.size() - 1)};
+		const Tileset& tileset {tilesets[tilesetIdx]};
 		size_t tileRepoIdx;
 
 		auto found {tileRepoFirstGidToIdx.find(tileset.firstGid)};
@@ -85,18 +84,11 @@ ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<T
 			.scale {tileLength * tileFlipX, tileLength * tileFlipY, 1.0f}
 		};
 
-		unsigned int tileIdxInTileset {tile.ID - tileset.firstGid};
-
-		glm::uvec2 tilesetSamplePosition
-		{
-			(tileIdxInTileset % tileset.tileCountU) * tileset.tileLength,
-			(tileset.tileCountV - tileIdxInTileset / tileset.tileCountU - 1) * tileset.tileLength
-		};
-
-		ImageSampleData tileSampleData {tilesetSamplePosition, tileset.tileLength, tileset.tileLength};
-
-		tileRepo.tileVector.emplace_back(tileTransform.generateMatrix(), tileSampleData);
-		_tileMatrix.emplace_back((int)tileRepoIdx, (int)(tileRepo.tileVector.size() - 1));
+		tileRepo.tiles.emplace_back
+		(
+			tileTransform.generateMatrix(), 
+			getTileSample(tileset, tile.ID - tileset.firstGid)
+		);
 	}
 }
 
@@ -104,6 +96,6 @@ void ng::tiled::TileLayer::draw(Renderer& render, const Prefab& quad) const
 {
 	for(const _TileRepo& tileRepo : _tileRepos)
 	{
-		render.draw(quad, tileRepo.tileVector.data(), tileRepo.tileVector.size(), tileRepo.tileset->image);
+		render.draw(quad, tileRepo.tiles.data(), tileRepo.tiles.size(), tileRepo.tileset->image);
 	}
 }

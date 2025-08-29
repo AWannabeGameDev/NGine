@@ -4,3 +4,12 @@ More to do :
 3. Tile animations
 4. Extract image from layer
 5. Image layers
+
+Tile animations :
+    Tilesets are stored centrally by the tilemap.
+    Each tile-layer stores tiles as -> [tileset ref, list of tiles (ModelData)]
+
+    Tile animation structure?
+        Tile animations are stored as special tiles in the tileset structure.
+        tileset -> tile -> animation -> list of tile-IDs
+        

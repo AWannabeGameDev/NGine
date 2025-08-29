@@ -2,6 +2,7 @@
 #define NG_TILE_LAYER_HPP
 
 #include <tmxlite/TileLayer.hpp>
+#include <tmxlite/Tileset.hpp>
 
 #include <vector>
 
@@ -9,35 +10,24 @@
 #include "ngine/renderer/renderer_data.hpp"
 #include "ngine/tilemap/tileset.hpp"
 #include "ngine/renderer/renderer.hpp"
+#include "ngine/renderer/animation.hpp"
 
 namespace ng::tiled
 {
 
 class TileLayer
 {
-	friend class Tilemap;
-
 private :
 	struct _TileRepo
 	{
 		const Tileset* tileset;
-		std::vector<ModelData> tileVector;
-	};
-
-	struct _TileReference
-	{
-		// these are ints and not size_t's so that an empty tile can be represented by -1.
-		int tileRepoIdx;
-		int tileIdx;
+		std::vector<ModelData> tiles;
 	};
 
 	const unsigned int _tileCountX;
 	const unsigned int _tileCountY;
 
 	std::vector<_TileRepo> _tileRepos {};
-
-	// top to bottom, left to right
-	std::vector<_TileReference> _tileMatrix {};
 
 	size_t _getTilesetIndexFor(uint32_t gid, const std::vector<Tileset>& tilesets, size_t first, size_t last);
 
