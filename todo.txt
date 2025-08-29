@@ -1,0 +1,2 @@
+Expose tile storage in tilemap API so that users can modify tile ModelData for rendering.
+Redesign rendering API with startInstanceBatch(prefab, material) / addModelData(ModelData) / endInstanceBatch() or something similar to make ModelData ergonomic.

@@ -13,7 +13,25 @@
 
 namespace ng::tiled
 {
-    
+
+struct Property
+{
+    std::string name;
+    std::variant<bool, float, int, std::string, glm::vec4> value;
+};
+
+enum class PropertyIndex
+{
+    BOOL, FLOAT, INT, STRING, COLOR
+};
+   
+struct SpecialTile
+{
+    uint32_t localId;
+    std::vector<Property> properties;
+    std::optional<Animation> animation;
+};
+
 struct Rectangle
 {
     glm::vec2 topLeft;
@@ -30,28 +48,10 @@ enum class ShapeIndex
     RECTANGLE, POINT
 };
 
-struct Property
-{
-    std::string name;
-    std::variant<bool, float, int, std::string, glm::vec4> value;
-};
-
-enum class PropertyIndex
-{
-    BOOL, FLOAT, INT, STRING, COLOR
-};
-
 struct Object
 {
     Shape shape;
     std::vector<Property> properties;
-};
-
-struct SpecialTile
-{
-    uint32_t localId;
-    std::vector<Property> properties;
-    std::optional<Animation> animation;
 };
 
 };
