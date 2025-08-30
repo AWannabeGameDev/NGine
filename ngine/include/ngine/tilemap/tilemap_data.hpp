@@ -24,6 +24,11 @@ enum class PropertyIndex
 {
     BOOL, FLOAT, INT, STRING, COLOR
 };
+
+struct Tile
+{
+    
+};
    
 struct SpecialTile
 {

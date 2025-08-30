@@ -135,17 +135,6 @@ void ng::Renderer::clear(const glm::vec4& color)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void ng::Renderer::addModelToBatch(const ModelData& model)
-{
-    if(_totalInstanceCount == _MAX_INSTANCES)
-    {
-        throw std::out_of_range {"Cannot exceed maximum number of instances per batch"};
-    }
-
-    _currentInstances[_totalInstanceCount] = model;
-    _totalInstanceCount++;
-}
-
 void ng::Renderer::addModelsToBatch(const ModelData* models, size_t count)
 {
     if(_totalInstanceCount > (_MAX_INSTANCES - count))
@@ -155,6 +144,11 @@ void ng::Renderer::addModelsToBatch(const ModelData* models, size_t count)
 
     std::copy(models, models + count, _currentInstances.data());
     _totalInstanceCount += count;
+}
+
+void ng::Renderer::addModelToBatch(const ModelData& model)
+{
+    addModelsToBatch(&model, 1);
 }
 
 void ng::Renderer::drawAndResetBatch(const Prefab& prefab, const Material& material)
