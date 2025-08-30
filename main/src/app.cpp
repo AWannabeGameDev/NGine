@@ -81,7 +81,8 @@ int main()
 		render.setCamera(camera.generateMatrix());
 		render.clear(glm::vec4 {0.05f, 0.05f, 0.05f, 0.0f});
 
-		render.draw(quad, objModels.data(), objModels.size(), glm::vec4 {1.0f, 1.0f, 1.0f, 1.0f});
+		render.addModelsToBatch(objModels.data(), objModels.size());
+		render.drawAndResetBatch(quad, glm::vec4 {1.0f});
 		map.draw(render, quad);
 
 		window.swapBuffers();

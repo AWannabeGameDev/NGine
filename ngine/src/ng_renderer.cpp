@@ -135,9 +135,31 @@ void ng::Renderer::clear(const glm::vec4& color)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void ng::Renderer::draw(const Prefab& prefab, const ModelData* modelDatas, size_t modelCount, const Material& material)
+void ng::Renderer::addModelToBatch(const ModelData& model)
 {
-    glNamedBufferSubData(_instanceVertexBuffer, 0, sizeof(ModelData) * modelCount, modelDatas);
+    if(_totalInstanceCount == _MAX_INSTANCES)
+    {
+        throw std::out_of_range {"Cannot exceed maximum number of instances per batch"};
+    }
+
+    _currentInstances[_totalInstanceCount] = model;
+    _totalInstanceCount++;
+}
+
+void ng::Renderer::addModelsToBatch(const ModelData* models, size_t count)
+{
+    if(_totalInstanceCount > (_MAX_INSTANCES - count))
+    {
+        throw std::out_of_range {"Cannot exceed maximum number of instances per batch"};
+    }
+
+    std::copy(models, models + count, _currentInstances.data());
+    _totalInstanceCount += count;
+}
+
+void ng::Renderer::drawAndResetBatch(const Prefab& prefab, const Material& material)
+{
+    glNamedBufferSubData(_instanceVertexBuffer, 0, _totalInstanceCount * sizeof(ModelData), _currentInstances.data());
     _uniforms.setUniform(_defaultShader, "color", material.color);
     _uniforms.setUniform(_defaultShader, "imageDimensions", glm::vec2 {material.image._width, material.image._height});
 
@@ -147,16 +169,18 @@ void ng::Renderer::draw(const Prefab& prefab, const ModelData* modelDatas, size_
 
     glUseProgram(_defaultShader);
     glDrawElementsInstancedBaseVertex(GL_TRIANGLES, prefab._indexCount, GL_UNSIGNED_INT,
-                                      (const void*)(prefab._indexOffset * sizeof(Index)), (GLsizei)modelCount, 
+                                      (const void*)(prefab._indexOffset * sizeof(Index)), (GLsizei)_totalInstanceCount, 
                                       prefab._vertexOffset);
+
+    _totalInstanceCount = 0;
 }
 
-void ng::Renderer::draw(const Prefab& prefab, const ModelData* modelDatas, size_t modelCount, const glm::vec4& color)
+void ng::Renderer::drawAndResetBatch(const Prefab& prefab, const glm::vec4& color)
 {
-    draw(prefab, modelDatas, modelCount, Material {_whiteImage, color});
+    drawAndResetBatch(prefab, Material {_whiteImage, color});
 }
 
-void ng::Renderer::draw(const Prefab& prefab, const ModelData* modelDatas, size_t modelCount, const Image& image)
+void ng::Renderer::drawAndResetBatch(const Prefab& prefab, const Image& image)
 {
-    draw(prefab, modelDatas, modelCount, Material {image, glm::vec4 {1.0f}});
+    drawAndResetBatch(prefab, Material {image, glm::vec4 {1.0f}});
 }

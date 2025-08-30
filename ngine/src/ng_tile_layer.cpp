@@ -96,6 +96,7 @@ void ng::tiled::TileLayer::draw(Renderer& render, const Prefab& quad) const
 {
 	for(const _TileRepo& tileRepo : _tileRepos)
 	{
-		render.draw(quad, tileRepo.tiles.data(), tileRepo.tiles.size(), tileRepo.tileset->image);
+		render.addModelsToBatch(tileRepo.tiles.data(), tileRepo.tiles.size());
+		render.drawAndResetBatch(quad, tileRepo.tileset->image);
 	}
 }

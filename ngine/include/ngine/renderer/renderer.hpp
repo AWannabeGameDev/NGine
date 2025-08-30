@@ -2,6 +2,7 @@
 #define NG_RENDERER_HPP
 
 #include <stdexcept>
+#include <array>
 
 #include "ngine/gl_base/shader.hpp"
 #include "ngine/gl_base/uniforms.hpp"
@@ -50,6 +51,9 @@ private :
     size_t _totalVertexCount {0};
     size_t _totalIndexCount {0};
 
+    std::array<ModelData, _MAX_INSTANCES> _currentInstances;
+    size_t _totalInstanceCount {0};
+
     GLuint _defaultShader {createShaderProgram({"ngine/src/shaders/default.vxs", "ngine/src/shaders/default.fms"})};
 
     Uniforms _uniforms {};
@@ -80,9 +84,11 @@ public :
     void resetGlobalTransform();
 
     void clear(const glm::vec4& color);
-    void draw(const Prefab& prefab, const ModelData* modelDatas, size_t modelCount, const Material& material);
-    void draw(const Prefab& prefab, const ModelData* modelDatas, size_t modelCount, const glm::vec4& color);
-    void draw(const Prefab& prefab, const ModelData* modelDatas, size_t modelCount, const Image& image);
+    void addModelToBatch(const ModelData& model);
+    void addModelsToBatch(const ModelData* models, size_t count);
+    void drawAndResetBatch(const Prefab& prefab, const Material& material);
+    void drawAndResetBatch(const Prefab& prefab, const glm::vec4& color);
+    void drawAndResetBatch(const Prefab& prefab, const Image& image);
 };
 
 }
