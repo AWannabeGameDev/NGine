@@ -7,15 +7,29 @@
 #include "ngine/util/transform.hpp"
 #include "ngine/tilemap/tilemap_util.hpp"
 
+ng::tiled::TileLayer::TileRepo::TileRepo(Tileset* tileset) :
+	tileset {tileset}
+{}
+
+ng::ModelData& ng::tiled::TileLayer::TileRepo::getTileModelData(size_t localId)
+{
+	return _tiles[_localIdToTileId[localId]];
+}
+
+const ng::ModelData& ng::tiled::TileLayer::TileRepo::getTileModelData(size_t localId) const
+{
+	return _tiles[_localIdToTileId[localId]];
+}
+
 size_t ng::tiled::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector<Tileset>& tilesets, size_t first, size_t last)
 {
 	size_t middleIdx {(first + last) / 2};
 
-	if(gid < tilesets[middleIdx].firstGid)
+	if(gid < tilesets[middleIdx]._firstGid)
 	{
 		return _getTilesetIndexFor(gid, tilesets, first, last - middleIdx - 1);
 	}
-	else if(gid > tilesets[middleIdx].lastGid)
+	else if(gid > tilesets[middleIdx]._lastGid)
 	{
 		return _getTilesetIndexFor(gid, tilesets, first + middleIdx + 1, last);
 	}
@@ -25,7 +39,7 @@ size_t ng::tiled::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector
 	}
 }
 
-ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<Tileset>& tilesets, Renderer& render, float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
+ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, std::vector<Tileset>& tilesets, Renderer& render, float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
 	_tileCountX {tileCountX}, _tileCountY {tileCountY}
 {
 	std::unordered_map<uint32_t, size_t> tileRepoFirstGidToIdx {};
@@ -41,10 +55,10 @@ ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<T
 		}
 
 		size_t tilesetIdx {_getTilesetIndexFor(tile.ID, tilesets, 0, tilesets.size() - 1)};
-		const Tileset& tileset {tilesets[tilesetIdx]};
+		Tileset& tileset {tilesets[tilesetIdx]};
 		size_t tileRepoIdx;
 
-		auto found {tileRepoFirstGidToIdx.find(tileset.firstGid)};
+		auto found {tileRepoFirstGidToIdx.find(tileset._firstGid)};
 		
 		if(found != tileRepoFirstGidToIdx.end())
 		{
@@ -52,12 +66,12 @@ ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<T
 		}
 		else
 		{
-			_tileRepos.emplace_back(&tileset, std::vector<ModelData> {});
-			tileRepoFirstGidToIdx.try_emplace(tileset.firstGid, _tileRepos.size() - 1);
+			_tileRepos.emplace_back(&tileset);
+			tileRepoFirstGidToIdx.try_emplace(tileset._firstGid, _tileRepos.size() - 1);
 			tileRepoIdx = _tileRepos.size() - 1;
 		}
 
-		_TileRepo& tileRepo {_tileRepos[tileRepoIdx]};
+		TileRepo& tileRepo {_tileRepos[tileRepoIdx]};
 
 		float tileFlipX {1.0f};
 		float tileFlipY {1.0f};
@@ -84,19 +98,38 @@ ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, const std::vector<T
 			.scale {tileLength * tileFlipX, tileLength * tileFlipY, 1.0f}
 		};
 
-		tileRepo.tiles.emplace_back
+		uint32_t localId {tile.ID - tileset._firstGid};
+
+		tileRepo._tiles.emplace_back
 		(
 			tileTransform.generateMatrix(), 
-			getTileSample(tileset, tile.ID - tileset.firstGid)
+			getTileSample(tileset, localId)
 		);
+
+		if(localId >= tileRepo._localIdToTileId.size())
+		{
+			tileRepo._localIdToTileId.resize(localId + 1, -1);
+		}
+
+		tileRepo._localIdToTileId[localId] = tileRepo._tiles.size() - 1;
 	}
+}
+
+std::span<ng::tiled::TileLayer::TileRepo> ng::tiled::TileLayer::getTileRepos()
+{
+	return std::span<TileRepo> {_tileRepos.begin(), _tileRepos.size()};
+}
+
+std::span<const ng::tiled::TileLayer::TileRepo> ng::tiled::TileLayer::getTileRepos() const
+{
+	return std::span<const TileRepo> {_tileRepos.begin(), _tileRepos.size()};
 }
 
 void ng::tiled::TileLayer::draw(Renderer& render, const Prefab& quad) const
 {
-	for(const _TileRepo& tileRepo : _tileRepos)
+	for(const TileRepo& tileRepo : _tileRepos)
 	{
-		render.addModelsToBatch(tileRepo.tiles.data(), tileRepo.tiles.size());
+		render.addModelsToBatch(tileRepo._tiles.data(), tileRepo._tiles.size());
 		render.drawAndResetBatch(quad, tileRepo.tileset->image);
 	}
 }

@@ -18,10 +18,10 @@ ng::tiled::Tilemap::Tilemap(std::string_view path, Renderer& render, ImageShrink
 
 		Tileset& newTileset {_tilesets.emplace_back
 		(
-			tilesetImg, tileset.getFirstGID(), tileset.getLastGID(),
+			tileset.getFirstGID(), tileset.getLastGID(),
 			tileset.getTileSize().x, tileset.getColumnCount(), 
 			tileset.getTileCount() / tileset.getColumnCount(),
-			std::vector<SpecialTile> {}
+			tilesetImg
 		)};
 
 		for(const tmx::Tileset::Tile& specialTile : tileset.getTiles())

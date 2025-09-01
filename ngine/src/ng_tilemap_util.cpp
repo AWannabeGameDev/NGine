@@ -35,9 +35,9 @@ ng::ImageSampleData ng::tiled::getTileSample(const ng::tiled::Tileset& tileset, 
 {
     glm::uvec2 tilesetSamplePosition
     {
-        (localTileId % tileset.tileCountU) * tileset.tileLength,
-        (tileset.tileCountV - localTileId / tileset.tileCountU - 1) * tileset.tileLength
+        (localTileId % tileset._tileCountU) * tileset._tileLength,
+        (tileset._tileCountV - localTileId / tileset._tileCountU - 1) * tileset._tileLength
     };
 
-    return ng::ImageSampleData {tilesetSamplePosition, tileset.tileLength, tileset.tileLength};
+    return ng::ImageSampleData {tilesetSamplePosition, tileset._tileLength, tileset._tileLength};
 }
