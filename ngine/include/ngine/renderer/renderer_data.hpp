@@ -4,9 +4,9 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
 
 #include "ngine/renderer/image.hpp"
+#include "ngine/util/transform.hpp"
 
 namespace ng
 {
@@ -43,7 +43,7 @@ struct ImageSampleData
 
 struct ModelData
 {
-    glm::mat4 transform;
+    Transform transform;
     ImageSampleData sampleData;
 };
 

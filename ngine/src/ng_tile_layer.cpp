@@ -103,7 +103,7 @@ ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, std::vector<Tileset
 
 		tileRepo._tiles.emplace_back
 		(
-			tileTransform.generateMatrix(), 
+			tileTransform, 
 			getTileSample(tileset, localId)
 		);
 

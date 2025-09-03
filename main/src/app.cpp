@@ -39,7 +39,7 @@ int main()
 					.height {1}
 				};
 
-				objModels.emplace_back(rectTransform.generateMatrix(), sampleData);
+				objModels.emplace_back(rectTransform, sampleData);
 			}
 		}
 	}
@@ -76,7 +76,7 @@ int main()
 			camera.transform.scale += glm::vec3 {zoomSpeed * deltaTime, zoomSpeed * deltaTime, 0.0f};
 		}
 
-		render.setCamera(camera.generateMatrix());
+		render.setCamera(camera);
 		render.clear(glm::vec4 {0.05f, 0.05f, 0.05f, 0.0f});
 
 		render.addModelsToBatch(objModels.data(), objModels.size());

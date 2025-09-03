@@ -25,8 +25,8 @@ ng::Renderer::Renderer(const Window& window)
     glVertexArrayElementBuffer(_vertexArray, _indexBuffer);
 
     glCreateBuffers(1, &_instanceVertexBuffer);
-    glNamedBufferData(_instanceVertexBuffer, _MAX_INSTANCES * sizeof(ModelData), nullptr, GL_DYNAMIC_DRAW);
-    glVertexArrayVertexBuffer(_vertexArray, _BINDING_POINT_INSTANCE, _instanceVertexBuffer, 0, sizeof(ModelData));
+    glNamedBufferData(_instanceVertexBuffer, _MAX_INSTANCES * sizeof(_InternalModelData), nullptr, GL_DYNAMIC_DRAW);
+    glVertexArrayVertexBuffer(_vertexArray, _BINDING_POINT_INSTANCE, _instanceVertexBuffer, 0, sizeof(_InternalModelData));
     glVertexArrayBindingDivisor(_vertexArray, _BINDING_POINT_INSTANCE, 1);
 
     glVertexArrayAttribFormat(_vertexArray, _ATTRIB_IDX_POSITION, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, position));
@@ -40,23 +40,23 @@ ng::Renderer::Renderer(const Window& window)
     for(GLuint i {0}; i < 4; i++)
     {
         glVertexArrayAttribFormat(_vertexArray, _ATTRIB_IDX_TRANSFORM + i, 4, GL_FLOAT, GL_FALSE, 
-                             offsetof(ModelData, transform) + (i * sizeof(glm::vec4)));
+                             offsetof(_InternalModelData, transform) + (i * sizeof(glm::vec4)));
         glVertexArrayAttribBinding(_vertexArray, _ATTRIB_IDX_TRANSFORM + i, _BINDING_POINT_INSTANCE);
         glEnableVertexArrayAttrib(_vertexArray, _ATTRIB_IDX_TRANSFORM + i);
     }
 
     glVertexArrayAttribFormat(_vertexArray, _ATTRIB_IDX_SAMPLE_BOTTOM_LEFT, 2, GL_INT, GL_FALSE,
-                               offsetof(ModelData, sampleData.bottomLeft));
+                               offsetof(_InternalModelData, sampleData.bottomLeft));
     glVertexArrayAttribBinding(_vertexArray, _ATTRIB_IDX_SAMPLE_BOTTOM_LEFT, _BINDING_POINT_INSTANCE);
     glEnableVertexArrayAttrib(_vertexArray, _ATTRIB_IDX_SAMPLE_BOTTOM_LEFT);
 
     glVertexArrayAttribFormat(_vertexArray, _ATTRIB_IDX_SAMPLE_WIDTH, 1, GL_INT, GL_FALSE,
-                               offsetof(ModelData, sampleData.width));
+                               offsetof(_InternalModelData, sampleData.width));
     glVertexArrayAttribBinding(_vertexArray, _ATTRIB_IDX_SAMPLE_WIDTH, _BINDING_POINT_INSTANCE);
     glEnableVertexArrayAttrib(_vertexArray, _ATTRIB_IDX_SAMPLE_WIDTH);
 
     glVertexArrayAttribFormat(_vertexArray, _ATTRIB_IDX_SAMPLE_HEIGHT, 1, GL_INT, GL_FALSE,
-                               offsetof(ModelData, sampleData.height));
+                               offsetof(_InternalModelData, sampleData.height));
     glVertexArrayAttribBinding(_vertexArray, _ATTRIB_IDX_SAMPLE_HEIGHT, _BINDING_POINT_INSTANCE);
     glEnableVertexArrayAttrib(_vertexArray, _ATTRIB_IDX_SAMPLE_HEIGHT);
 
@@ -100,9 +100,9 @@ ng::Prefab ng::Renderer::newPrefab(const Vertex* vertices, size_t vertexCount, c
     return ret;
 }
 
-void ng::Renderer::setCamera(const glm::mat4& cameraMatrix)
+void ng::Renderer::setCamera(const OrthographicCamera& camera)
 {
-    _uniforms.setUniform(_defaultShader, "camera", cameraMatrix);
+    _uniforms.setUniform(_defaultShader, "camera", camera.generateMatrix());
 }
 
 void ng::Renderer::setViewport(const Window& window, const Viewport& newViewport)
@@ -122,9 +122,9 @@ void ng::Renderer::resetViewport(const Window& window)
     glViewport(0, 0, window.width(), window.height());
 }
 
-void ng::Renderer::setGlobalTransform(const glm::mat4& transform)
+void ng::Renderer::setGlobalTransform(const Transform& transform)
 {
-    _uniforms.setUniform(_defaultShader, "globalTransform", transform);
+    _uniforms.setUniform(_defaultShader, "globalTransform", transform.generateMatrix());
 }
 
 void ng::Renderer::resetGlobalTransform()
@@ -145,7 +145,12 @@ void ng::Renderer::addModelsToBatch(const ModelData* models, size_t count)
         throw std::out_of_range {"Cannot exceed maximum number of instances per batch"};
     }
 
-    std::copy(models, models + count, _currentInstances.data());
+    for(size_t idx {_totalInstanceCount}, modelIdx {0}; idx < (_totalInstanceCount + count); idx++, modelIdx++)
+    {
+        _currentInstances[idx].transform = models[modelIdx].transform.generateMatrix();
+        _currentInstances[idx].sampleData = models[modelIdx].sampleData;
+    }
+
     _totalInstanceCount += count;
 }
 
@@ -156,7 +161,7 @@ void ng::Renderer::addModelToBatch(const ModelData& model)
 
 void ng::Renderer::drawAndResetBatch(const Prefab& prefab, const Material& material)
 {
-    glNamedBufferSubData(_instanceVertexBuffer, 0, _totalInstanceCount * sizeof(ModelData), _currentInstances.data());
+    glNamedBufferSubData(_instanceVertexBuffer, 0, _totalInstanceCount * sizeof(_InternalModelData), _currentInstances.data());
     _uniforms.setUniform(_defaultShader, "color", material.color);
     _uniforms.setUniform(_defaultShader, "imageDimensions", glm::vec2 {material.image._width, material.image._height});
 

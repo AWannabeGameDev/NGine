@@ -13,8 +13,7 @@ glm::mat4 ng::OrthographicCamera::generateMatrix() const
 		0.0f, dimensions.z
 	)};
 
-	glm::mat4 view {1.0f};
-	view = view * glm::mat4_cast(glm::conjugate(transform.rotation));
+	glm::mat4 view {glm::mat4_cast(glm::conjugate(transform.rotation))};
 	view = glm::translate(view, -transform.position);
 
 	return projection * view;

@@ -132,7 +132,7 @@ const ng::tiled::ObjectLayer& ng::tiled::Tilemap::getObjectLayer(std::string_vie
 	return _objectLayers[_nameToObjLayerIdx.at(name)];
 }
 
-void ng::tiled::Tilemap::draw(Renderer& render, const glm::mat4& transform) const
+void ng::tiled::Tilemap::draw(Renderer& render, const Transform& transform) const
 {
 	render.setGlobalTransform(transform);
 

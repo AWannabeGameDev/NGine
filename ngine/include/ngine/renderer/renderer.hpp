@@ -27,6 +27,12 @@ private :
         GLuint instanceOffset;
     };
 
+    struct _InternalModelData
+    {
+        glm::mat4 transform;
+        ImageSampleData sampleData;
+    };
+
     static constexpr size_t _MAX_VERTICES {1024};
     static constexpr size_t _MAX_INDICES {4096};
     static constexpr size_t _MAX_INSTANCES {2048};
@@ -51,7 +57,7 @@ private :
     size_t _totalVertexCount {0};
     size_t _totalIndexCount {0};
 
-    std::array<ModelData, _MAX_INSTANCES> _currentInstances;
+    std::array<_InternalModelData, _MAX_INSTANCES> _currentInstances;
     size_t _totalInstanceCount {0};
 
     GLuint _defaultShader {createShaderProgram({"ngine/src/shaders/default.vxs", "ngine/src/shaders/default.fms"})};
@@ -76,16 +82,17 @@ public :
 
     Prefab newPrefab(const Vertex* vertices, size_t vertexCount, const Index* indices, size_t indexCount);
 
-    void setCamera(const glm::mat4& cameraMatrix);
+    void setCamera(const OrthographicCamera& camera);
     void setViewport(const Window& window, const Viewport& newViewport);
 
     // Sets the viewport to fill the current window area.
     void resetViewport(const Window& window);
 
-    void setGlobalTransform(const glm::mat4& transform);
+    void setGlobalTransform(const Transform& transform);
     void resetGlobalTransform();
 
     // draw functions use a unit quad centered at origin by default
+    // For now, each ModelData's transform is converted to a matrix every draw call. In the future this may be optimized
     void clear(const glm::vec4& color);
     void addModelToBatch(const ModelData& model);
     void addModelsToBatch(const ModelData* models, size_t count);

@@ -38,7 +38,7 @@ public :
 	ObjectLayer& getObjectLayer(std::string_view name);
 	const ObjectLayer& getObjectLayer(std::string_view name) const;
 
-	void draw(Renderer& render, const glm::mat4& transform = glm::mat4 {1.0f}) const;
+	void draw(Renderer& render, const Transform& transform = Transform {}) const;
 };
 
 }
