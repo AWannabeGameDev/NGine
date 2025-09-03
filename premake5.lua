@@ -45,8 +45,7 @@ project "main"
     dependson {"ngine"}
     links {"ngine"}
 
-    includedirs {"ngine/include"}
-    includedirs {"ngine/ext_include"}
+    includedirs {"ngine/include", "ngine/ext_include"}
     objdir "main/bin/interms"
 
     files {"main/src/**.cpp"}
