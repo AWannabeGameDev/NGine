@@ -1,7 +1,8 @@
 #include "ngine/tilemap/object_layer.hpp"
 #include "ngine/tilemap/tilemap_util.hpp"
 
-ng::tiled::ObjectLayer::ObjectLayer(const tmx::ObjectGroup& objLayer, unsigned int mapWidth, unsigned int mapHeight, unsigned int mapTileSize)
+ng::tiled::ObjectLayer::ObjectLayer(const tmx::ObjectGroup& objLayer, std::string_view name, unsigned int mapWidth, unsigned int mapHeight, unsigned int mapTileSize) :
+    name {name}
 {
     for(const tmx::Object& object : objLayer.getObjects())
     {

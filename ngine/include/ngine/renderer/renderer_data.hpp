@@ -25,10 +25,11 @@ class Prefab
     friend class Renderer;
 
 private :
-    const GLuint _indexCount;
-    const GLuint _indexOffset;
-    const GLint _vertexOffset;
+    GLuint _indexCount {};
+    GLuint _indexOffset {};
+    GLint _vertexOffset {};
 
+    Prefab();
     Prefab(GLuint indexCount, GLuint indexOffset, GLint vertexOffset);
 };
 

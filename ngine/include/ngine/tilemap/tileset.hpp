@@ -2,6 +2,7 @@
 #define NG_TILESET_HPP
 
 #include <vector>
+#include <span>
 
 #include "ngine/renderer/image.hpp"
 #include "ngine/renderer/animation.hpp"
@@ -12,6 +13,7 @@ namespace ng::tiled
 
 class Tileset
 {
+	friend class Tilemap;
 	friend class TileLayer;
 	friend ng::ImageSampleData getTileSample(const Tileset& tileset, uint32_t localTileId);
 
@@ -22,11 +24,15 @@ private :
 	unsigned int _tileCountU;
 	unsigned int _tileCountV;
 
+	std::vector<SpecialTile> _specialTiles {};
+
 public :
 	Image image;
-	std::vector<SpecialTile> specialTiles {};
-
+	
 	Tileset(uint32_t firstGid, uint32_t lastGid, unsigned int tileLength, unsigned int tileCountU, unsigned int tileCountV, const Image& image);
+
+	std::span<SpecialTile> getSpecialTiles();
+	std::span<const SpecialTile> getSpecialTiles() const;
 
 	unsigned int tileLength();
 	unsigned int widthInTiles();

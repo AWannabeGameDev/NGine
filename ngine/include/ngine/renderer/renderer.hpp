@@ -62,6 +62,8 @@ private :
     Viewport _viewport {glm::vec2 {0.0f}, 2.0f, 2.0f};
 
 public :
+    Prefab quad;
+
     // The initial viewport fills the window area.
     Renderer(const Window& window);
 
@@ -83,6 +85,7 @@ public :
     void setGlobalTransform(const glm::mat4& transform);
     void resetGlobalTransform();
 
+    // draw functions use a unit quad centered at origin by default
     void clear(const glm::vec4& color);
     void addModelToBatch(const ModelData& model);
     void addModelsToBatch(const ModelData* models, size_t count);

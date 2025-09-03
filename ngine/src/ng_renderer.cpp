@@ -2,6 +2,7 @@
 
 #include "ngine/renderer/renderer.hpp"
 #include "ngine/window/window.hpp"
+#include "ngine/renderer/default_models.hpp"
 
 ng::Renderer::Renderer(const Window& window)
 {
@@ -60,6 +61,8 @@ ng::Renderer::Renderer(const Window& window)
     glEnableVertexArrayAttrib(_vertexArray, _ATTRIB_IDX_SAMPLE_HEIGHT);
 
     glBindVertexArray(_vertexArray);
+
+    quad = newPrefab(quadVertices.data(), quadVertices.size(), quadIndices.data(), quadIndices.size());
 
     _uniforms.addUniform(_defaultShader, "camera");
     _uniforms.addUniform(_defaultShader, "color");

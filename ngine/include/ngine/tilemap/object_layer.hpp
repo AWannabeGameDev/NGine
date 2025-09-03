@@ -5,8 +5,8 @@
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
 
-#include <variant>
 #include <vector>
+#include <string>
 
 #include "ngine/tilemap/tilemap_data.hpp"
 
@@ -16,9 +16,10 @@ namespace ng::tiled
 class ObjectLayer
 {
 public :
+    const std::string name;
     std::vector<Object> objects {};
 
-    ObjectLayer(const tmx::ObjectGroup& objLayer, unsigned int mapWidth, unsigned int mapHeight, unsigned int mapTileSize);
+    ObjectLayer(const tmx::ObjectGroup& objLayer, std::string_view name, unsigned int mapWidth, unsigned int mapHeight, unsigned int mapTileSize);
 };
 
 }

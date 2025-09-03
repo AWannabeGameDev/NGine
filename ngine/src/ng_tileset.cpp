@@ -6,6 +6,16 @@ ng::tiled::Tileset::Tileset(uint32_t firstGid, uint32_t lastGid, unsigned int ti
     image {image}
 {}
 
+std::span<ng::tiled::SpecialTile> ng::tiled::Tileset::getSpecialTiles()
+{
+    return std::span<SpecialTile> {_specialTiles.begin(), _specialTiles.size()};
+}
+
+std::span<const ng::tiled::SpecialTile> ng::tiled::Tileset::getSpecialTiles() const
+{
+    return std::span<const SpecialTile> {_specialTiles.begin(), _specialTiles.size()};
+}
+
 unsigned int ng::tiled::Tileset::tileLength()
 {
     return _tileLength;

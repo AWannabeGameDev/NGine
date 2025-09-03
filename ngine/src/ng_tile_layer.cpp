@@ -39,8 +39,9 @@ size_t ng::tiled::TileLayer::_getTilesetIndexFor(uint32_t gid, const std::vector
 	}
 }
 
-ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, std::vector<Tileset>& tilesets, Renderer& render, float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
-	_tileCountX {tileCountX}, _tileCountY {tileCountY}
+ng::tiled::TileLayer::TileLayer(const tmx::TileLayer& layer, std::vector<Tileset>& tilesets, std::string_view name, Renderer& render, float tileLength, unsigned int tileCountX, unsigned int tileCountY, float layerDepth) :
+	_tileCountX {tileCountX}, _tileCountY {tileCountY},
+	name {name}
 {
 	std::unordered_map<uint32_t, size_t> tileRepoFirstGidToIdx {};
 
@@ -125,11 +126,11 @@ std::span<const ng::tiled::TileLayer::TileRepo> ng::tiled::TileLayer::getTileRep
 	return std::span<const TileRepo> {_tileRepos.begin(), _tileRepos.size()};
 }
 
-void ng::tiled::TileLayer::draw(Renderer& render, const Prefab& quad) const
+void ng::tiled::TileLayer::draw(Renderer& render) const
 {
 	for(const TileRepo& tileRepo : _tileRepos)
 	{
 		render.addModelsToBatch(tileRepo._tiles.data(), tileRepo._tiles.size());
-		render.drawAndResetBatch(quad, tileRepo.tileset->image);
+		render.drawAndResetBatch(render.quad, tileRepo.tileset->image);
 	}
 }

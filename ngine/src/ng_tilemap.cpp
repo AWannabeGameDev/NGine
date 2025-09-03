@@ -26,7 +26,7 @@ ng::tiled::Tilemap::Tilemap(std::string_view path, Renderer& render, ImageShrink
 
 		for(const tmx::Tileset::Tile& specialTile : tileset.getTiles())
 		{
-			SpecialTile& newSpecialTile {newTileset.specialTiles.emplace_back
+			SpecialTile& newSpecialTile {newTileset._specialTiles.emplace_back
 			(
 				specialTile.ID, 
 				std::vector<Property> {}, 
@@ -66,10 +66,12 @@ ng::tiled::Tilemap::Tilemap(std::string_view path, Renderer& render, ImageShrink
 			const tmx::Vector2u& tileCount {map.getTileCount()};
 			_tileLayers.emplace_back
 			(
-				tileLayer, _tilesets, render, tileSize, 
+				tileLayer, _tilesets, tileLayer.getName(), render, tileSize, 
 				tileCount.x, tileCount.y, 
 				(float)(map.getLayers().size() - layerIdx)
 			);
+
+			_nameToTileLayerIdx[_tileLayers.back().name] = _tileLayers.size() - 1;
 			
 			break;
 		}
@@ -80,21 +82,63 @@ ng::tiled::Tilemap::Tilemap(std::string_view path, Renderer& render, ImageShrink
 
 			const tmx::Vector2u& tileCount {map.getTileCount()};
 			const tmx::Vector2u& tileSize {map.getTileSize()};
-			objectLayers.emplace_back(objLayer, tileCount.x * tileSize.x, tileCount.y * tileSize.x, tileSize.x);
+			_objectLayers.emplace_back(objLayer, objLayer.getName(), tileCount.x * tileSize.x, tileCount.y * tileSize.x, tileSize.x);
 			
+			_nameToObjLayerIdx[_objectLayers.back().name] = _objectLayers.size() - 1;
+
 			break;
 		}
 		}
 	}
 }
 
-void ng::tiled::Tilemap::draw(Renderer& render, const Prefab& quad, const glm::mat4& transform) const
+std::span<ng::tiled::TileLayer> ng::tiled::Tilemap::getTileLayers()
+{
+	return std::span<TileLayer> {_tileLayers.begin(), _tileLayers.size()};
+}
+
+std::span<const ng::tiled::TileLayer> ng::tiled::Tilemap::getTileLayers() const
+{
+	return std::span<const TileLayer> {_tileLayers.begin(), _tileLayers.size()};
+}
+
+std::span<ng::tiled::ObjectLayer> ng::tiled::Tilemap::getObjectLayers()
+{
+	return std::span<ObjectLayer> {_objectLayers.begin(), _objectLayers.size()};
+}
+
+std::span<const ng::tiled::ObjectLayer> ng::tiled::Tilemap::getObjectLayers() const
+{
+	return std::span<const ObjectLayer> {_objectLayers.begin(), _objectLayers.size()};
+}
+
+ng::tiled::TileLayer& ng::tiled::Tilemap::getTileLayer(std::string_view name)
+{
+	return _tileLayers[_nameToTileLayerIdx.at(name)];
+}
+
+const ng::tiled::TileLayer& ng::tiled::Tilemap::getTileLayer(std::string_view name) const
+{
+	return _tileLayers[_nameToTileLayerIdx.at(name)];
+}
+
+ng::tiled::ObjectLayer& ng::tiled::Tilemap::getObjectLayer(std::string_view name)
+{
+	return _objectLayers[_nameToObjLayerIdx.at(name)];
+}
+
+const ng::tiled::ObjectLayer& ng::tiled::Tilemap::getObjectLayer(std::string_view name) const
+{
+	return _objectLayers[_nameToObjLayerIdx.at(name)];
+}
+
+void ng::tiled::Tilemap::draw(Renderer& render, const glm::mat4& transform) const
 {
 	render.setGlobalTransform(transform);
 
 	for(const TileLayer& tileLayer : _tileLayers)
 	{
-		tileLayer.draw(render, quad);
+		tileLayer.draw(render);
 	}
 
 	render.resetGlobalTransform();

@@ -15,12 +15,10 @@ int main()
 	float cameraSpeed {150.0f};
 	float zoomSpeed {3.0f};
 
-	ng::Prefab quad {render.newPrefab(ng::quadVertices.data(), ng::quadVertices.size(), ng::quadIndices.data(), ng::quadIndices.size())};
-
 	ng::tiled::Tilemap map {"main/res/orthogonal-outside.tmx", render, ng::ImageShrinkFilter::PIXEL_NEAREST_NO_MIPMAP, ng::ImageEnlargeFilter::PIXEL_NEAREST, 1, 10.0f};
 	std::vector<ng::ModelData> objModels {};
 
-	for(const ng::tiled::ObjectLayer& objLayer : map.objectLayers)
+	for(const ng::tiled::ObjectLayer& objLayer : map.getObjectLayers())
 	{
 		for(const ng::tiled::Object& obj : objLayer.objects)
 		{
@@ -82,8 +80,8 @@ int main()
 		render.clear(glm::vec4 {0.05f, 0.05f, 0.05f, 0.0f});
 
 		render.addModelsToBatch(objModels.data(), objModels.size());
-		render.drawAndResetBatch(quad, glm::vec4 {1.0f});
-		map.draw(render, quad);
+		render.drawAndResetBatch(render.quad, glm::vec4 {1.0f});
+		map.draw(render);
 
 		window.swapBuffers();
 	}

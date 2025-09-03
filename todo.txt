@@ -1,8 +1,4 @@
-Expose tile storage in tilemap API so that users can modify tile ModelData for rendering.
-    -> Make internal parameters of tileset private.
-    -> Dense tile-ModelData array in each tile-repo + a lookup table for O(1) local-ID based access.
-    -> Add lookup function in tile-repo struct.
-    -> Add a getter for the tile-repo array in a tile-layer.
+Make a simple game with NGine that tests all its features so far.
 
 Future:
     Rewrite tilemap API internals with just an XML parsing library, not a TMX library
